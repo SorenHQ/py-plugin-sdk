@@ -265,7 +265,8 @@ class Plugin:
                 return msg
             except NoRespondersError as e:
                 if attempt < max_retries - 1:
-                    logger.warning(f"Progress command {command} no responder error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in 1 second...")
+                    if attempt >0:
+                        logger.warning(f"Progress command {command} no responder error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in 1 second...")
                     await asyncio.sleep(1)
                     continue
                 else:
