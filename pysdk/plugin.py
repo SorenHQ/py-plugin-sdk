@@ -121,8 +121,11 @@ class Plugin:
                 await msg.respond(b"null")
                 return
             
+            # Use default reply_to if empty or not set
+            reply_to = self.settings.reply_to if self.settings.reply_to else "_settings.config.submit"
+            
             settings_dict = {
-                "replyTo": self.settings.reply_to,
+                "replyTo": reply_to,
                 "jsonui": self.settings.jsonui,
                 "jsonschema": self.settings.jsonschema,
             }
@@ -139,8 +142,10 @@ class Plugin:
         logger.info(f"Subscribed to settings: {subject}")
         
         # Settings submit handler
-        if self.settings and self.settings.reply_to:
-            submit_subject = self.sdk.make_subject(self.settings.reply_to)
+        if self.settings:
+            # Use default reply_to if empty or not set
+            reply_to = self.settings.reply_to if self.settings.reply_to else "_settings.config.submit"
+            submit_subject = self.sdk.make_subject(reply_to)
             
             async def submit_callback(msg):
                 if self.settings.handler:
