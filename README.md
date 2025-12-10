@@ -107,7 +107,7 @@ Event logging functionality for the Soren platform.
 ## Requirements
 
 - Python 3.8 or higher
-- NATS server running
+- Soren Agent running
 
 ## Example
 
