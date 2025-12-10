@@ -8,10 +8,10 @@ Python SDK for creating plugins that implement the Sorenv2 protocol. This SDK pr
 
 ```bash
 # Install from GitHub
-pip install git+https://github.com/SorenHQ/py-plugin-sdk.git
+pip install --force-reinstall git+https://github.com/SorenHQ/py-plugin-sdk.git
 
 # Or from a specific branch/tag
-pip install git+https://github.com/SorenHQ/py-plugin-sdk.git@main
+pip install --force-reinstall  git+https://github.com/SorenHQ/py-plugin-sdk.git@v0.0.6
 ```
 
 ### From Local Directory
