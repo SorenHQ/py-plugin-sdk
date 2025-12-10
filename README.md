@@ -112,3 +112,18 @@ Event logging functionality for the Soren platform.
 ## Example
 
 See `main_test.py` for a complete working example.
+
+## Plugin Development Template
+
+**New to plugin development?** Check out [README-VIBE-CODE.md](README-VIBE-CODE.md) - a comprehensive AI-friendly template that helps you generate complete plugins for any API integration (Jira, GitHub, Slack, etc.).
+
+The template includes:
+- **Complete code structure** - Full plugin template based on best practices
+- **Settings configuration** - How to define global credentials and configuration
+- **Action handlers** - Step-by-step guide for implementing plugin operations
+- **FormJSON.io integration** - How to create user-friendly forms with JsonUI and JSONSchema
+- **Environment setup** - Guide for using environment variables from Soren web panel
+- **Real-world examples** - Jira integration example and common patterns
+- **Development checklist** - Everything you need to build a complete plugin
+
+Perfect for AI-assisted development or as a learning resource for building your first plugin!
