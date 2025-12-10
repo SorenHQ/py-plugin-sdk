@@ -2,8 +2,14 @@
 Data models for Soren Python SDK
 """
 
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Union, Awaitable
 from dataclasses import dataclass, field
+
+try:
+    from nats.aio.msg import Msg
+except ImportError:
+    # Fallback for type checking if nats is not installed
+    Msg = Any
 
 from .types import EventType, LogLevel
 
@@ -21,7 +27,7 @@ class Requirements:
     reply_to: str
     jsonui: Dict[str, Any]
     jsonschema: Dict[str, Any]
-    handler: Optional[Callable[[Any], Any]] = None
+    handler: Optional[Callable[[Msg], Union[Any, Awaitable[Any]]]] = None
 
 
 @dataclass
@@ -48,17 +54,17 @@ class Action:
     description: str = ""
     icon: Icon = field(default_factory=Icon)
     form: Optional[ActionFormBuilder] = None
-    request_handler: Optional[Callable[[Any], Any]] = None
+    request_handler: Optional[Callable[[Msg], Union[Any, Awaitable[Any]]]] = None
 
 
 @dataclass
 class Settings:
     """Settings form configuration"""
-    reply_to: str
     jsonui: Dict[str, Any]
     jsonschema: Dict[str, Any]
+    reply_to: str = "_settings.config.submit"
     data: Optional[Dict[str, Any]] = None
-    handler: Optional[Callable[[Any], Any]] = None
+    handler: Optional[Callable[[Msg], Union[Any, Awaitable[Any]]]] = None
 
 
 @dataclass

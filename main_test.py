@@ -24,6 +24,10 @@ from pysdk import (
     Command,
 )
 
+# Global plugin instance - accessible from all handlers
+# This allows handlers to use plugin methods like done(), progress(), etc.
+plugin: Plugin = None
+
 
 async def settings_update_handler(msg):
     """Handle settings update"""
@@ -33,10 +37,10 @@ async def settings_update_handler(msg):
     try:
         with open("my_database.json", "w") as f:
             json.dump(settings, f)
-        return {"status": "accepted"}
+        await msg.respond(json.dumps({"status": "accepted"}).encode())
     except Exception as e:
         print(f"Error Writing Settings to File: {e}")
-        return {"status": "not_accepted", "error": str(e)}
+        await msg.respond(json.dumps({"status": "not_accepted", "error": str(e)}).encode())
 
 
 def get_default_settings():
@@ -66,9 +70,12 @@ async def prepare_handler(msg):
     # for example in this step we register a job in local database or external system - make a scan in Joern
     try:
         job_id = str(uuid.uuid4())
-        return {"jobId": job_id}
-    except Exception:
-        return {"details": {"error": "service unavailable"}}
+        print(f"Job ID: {job_id}")
+        await msg.respond(json.dumps({"jobId": job_id}).encode())
+        await plugin.done(job_id, {"details": "Job completed successfully from prepare handler in py sdk"})
+    except Exception as e:
+        print(f"Error in prepare_handler: {e}")
+        await msg.respond(json.dumps({"details": {"error": "service unavailable"}}).encode())
 
 
 async def scan_gen_graph_handler(msg):
@@ -76,9 +83,12 @@ async def scan_gen_graph_handler(msg):
     # for example in this step we register a job in local database or external system - make a scan in Joern
     try:
         job_id = str(uuid.uuid4())
-        return {"jobId": job_id}
-    except Exception:
-        return {"details": {"error": "service unavailable"}}
+        print(f"Job ID: {job_id}")
+        await msg.respond(json.dumps({"jobId": job_id}).encode())
+        await plugin.done(job_id, {"details": "Job completed successfully from scan.gen.graph handler in py sdk"})
+    except Exception as e:
+        print(f"Error in scan_gen_graph_handler: {e}")
+        await msg.respond(json.dumps({"details": {"error": "service unavailable"}}).encode())
 
 
 async def main():
@@ -107,6 +117,8 @@ async def main():
     print("NATS connection verified successfully")
     
     try:
+        # Set global plugin instance so handlers can access it
+        global plugin
         plugin = Plugin(sdk_instance)
         
         plugin.set_intro(
